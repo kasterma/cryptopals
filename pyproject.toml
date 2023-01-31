@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "cryptopals"
+version = "0.0.0"
+description = "Cryptopals problems worked out"
+authors = ["Bart Kastermans <kasterma@kasterma.net>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+bandit = "^1.7.4"
+black = "^22.12.0"
+hypothesis = "^6.65.2"
+pytest = "^7.2.1"
+safety = "^2.3.5"
+isort = "^5.12.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.bandit]
+skips = ["B101"]
