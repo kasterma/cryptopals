@@ -1,0 +1,15 @@
+name: make test
+run-name: run unittests
+on: [push]
+jobs:
+  make-test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: python --version
+      - run: curl -sSL https://install.python-poetry.org | python -
+      - run: poetry --version
+
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: make install
+      - run: make test
