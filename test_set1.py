@@ -1,10 +1,12 @@
 ## test_set1.py
 
+from collections import Counter
+
 import pytest
 from hypothesis import given
 from hypothesis.strategies import binary, composite, integers
 
-from set1 import fixed_xor, hex2b64
+from set1 import *
 
 
 def test_ex1():
@@ -56,3 +58,43 @@ def test_fixed_xor_rejects_different_length():
     in2 = "686974207468652062756c6c277320657"
     with pytest.raises(AssertionError):
         fixed_xor(in1, in2)
+
+
+@pytest.mark.parametrize(
+    "plaintext, short",
+    [
+        ("This is a normal English text to be encrypted with a one char key", False),
+        ("Another perfectly normal English text to be tried", False),
+        ("Does this work as well?", False),
+        ("How about this?", True),
+        ("Some more text to try", False),
+        ("Cooking MC's like a pound of bacon", True),
+    ],
+)
+def test_find_decryption(plaintext, short):
+    """Our scoring is not perfect, on some "short" texts the right
+    decoding is not the best scoring result.  Hence for some we only
+    check that the candidate is among the first 3.  We can filter more
+    on "special" characters, but that doesn't feel right.
+
+    """
+    plain = plaintext.encode().hex()
+    c = 42
+    key = one_char_key(c, len(plain) // 2)
+    cipher = fixed_xor(plain, key)
+
+    candidates = all_one_char_decodes(cipher)
+    candidates_decoded = decode_all(candidates)
+    assert plaintext in candidates_decoded
+    ft = freq_tables(candidates_decoded)
+    assert ft[plaintext] == Counter(plaintext.upper())
+    candidates_ordered = order_ft(ft)
+    assert plaintext in candidates_ordered[:3]
+    if not short:
+        assert plaintext == candidates_ordered[0]
+
+
+def test_ex3():
+    cipher = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
+    candidates = all_one_char_decodes(cipher)
+    assert "Cooking MC's like a pound of bacon" in find_decode(cipher, 5)
