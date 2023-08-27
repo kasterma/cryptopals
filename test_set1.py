@@ -3,7 +3,9 @@
 from collections import Counter
 
 import pytest
-from hypothesis import given
+import random
+import secrets
+from hypothesis import given, note
 from hypothesis.strategies import binary, composite, integers
 
 from set1 import *
@@ -98,3 +100,34 @@ def test_ex3():
     cipher = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
     candidates = all_one_char_decodes(cipher)
     assert "Cooking MC's like a pound of bacon" in find_decode(cipher, 5)
+
+
+@pytest.mark.parametrize(
+    "plaintext",
+    [
+        "This is a normal English text to be encrypted with a one char key",
+        "Another perfectly normal English text to be tried",
+        "Does this work as well?",
+        "How about this?",
+        "Some more text to try",
+        "Cooking MC's like a pound of bacon",
+    ],
+)
+def test_develop_ex4(plaintext):
+    plain = plaintext.encode().hex()
+    c = 42
+    key = one_char_key(c, len(plain) // 2)
+    cipher = fixed_xor(plain, key)
+
+    l = len(cipher.encode())
+    N = 50
+    fake_ciphers = [secrets.token_hex(l) for _ in range(N)]
+    ciphers = fake_ciphers + [cipher]
+    random.shuffle(ciphers)
+
+    assert plaintext in [p[0] for ps in find_all_decodes(ciphers, 3, 2) for p in ps]
+
+def test_ex4():
+    with open("4.txt") as f:
+        data = [l.strip() for l in f.readlines()]
+    assert 'Now that the party is jumping\n' in [p[0] for ps in find_all_decodes(data, 4, 4) for p in ps]
