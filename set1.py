@@ -114,3 +114,12 @@ def find_all_decodes(
     ]
     scored_sorted = [sorted(x, key=lambda p: p[1]) for x in scored if x]
     return [xs[:per_candidate_count] for xs in scored_sorted[:candidate_count]]
+
+
+def repeating_key_xor(plain, key, encode: bool = True):
+    def get_key():
+        while True:
+            for c in key.encode():
+                yield c
+
+    return bytes(i ^ k for i, k in zip(plain.encode(), get_key())).hex()
