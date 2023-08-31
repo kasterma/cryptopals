@@ -1,10 +1,10 @@
 ## test_set1.py
 
+import random
+import secrets
 from collections import Counter
 
 import pytest
-import random
-import secrets
 from hypothesis import given, note
 from hypothesis.strategies import binary, composite, integers
 
@@ -127,7 +127,10 @@ def test_develop_ex4(plaintext):
 
     assert plaintext in [p[0] for ps in find_all_decodes(ciphers, 3, 2) for p in ps]
 
+
 def test_ex4():
     with open("4.txt") as f:
         data = [l.strip() for l in f.readlines()]
-    assert 'Now that the party is jumping\n' in [p[0] for ps in find_all_decodes(data, 4, 4) for p in ps]
+    assert "Now that the party is jumping\n" in [
+        p[0] for ps in find_all_decodes(data, 4, 4) for p in ps
+    ]

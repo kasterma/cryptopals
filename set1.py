@@ -106,7 +106,11 @@ def find_decode(cipher: str, candidate_count: int = 1) -> list[str]:
     return candidates_ordered[:candidate_count]
 
 
-def find_all_decodes(ciphers: list[str], per_candidate_count: int = 1, candidate_count: int = 1) -> list[list[(str, float)]]:
-    scored = [[(d, score(d)) for d in decode_all(all_one_char_decodes(c))] for c in ciphers]
+def find_all_decodes(
+    ciphers: list[str], per_candidate_count: int = 1, candidate_count: int = 1
+) -> list[list[(str, float)]]:
+    scored = [
+        [(d, score(d)) for d in decode_all(all_one_char_decodes(c))] for c in ciphers
+    ]
     scored_sorted = [sorted(x, key=lambda p: p[1]) for x in scored if x]
     return [xs[:per_candidate_count] for xs in scored_sorted[:candidate_count]]
