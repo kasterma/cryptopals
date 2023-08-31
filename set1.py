@@ -3,6 +3,9 @@
 import base64
 import string
 from collections import Counter, defaultdict
+from itertools import zip_longest
+
+from icecream import ic
 
 LETTER_FREQ_TABLE = {
     "A": 8.2,
@@ -123,3 +126,32 @@ def repeating_key_xor(plain, key, encode: bool = True):
                 yield c
 
     return bytes(i ^ k for i, k in zip(plain.encode(), get_key())).hex()
+
+
+def bit_diff(b1: int, b2: int) -> int:
+    ct = 0
+    while b1 or b2:
+        if b1 % 2 != b2 % 2:
+            ct += 1
+        b1 //= 2
+        b2 //= 2
+    return ct
+
+
+def edit_distance(w1, w2):
+    """Counting difference in number of _bits_ between these two strings"""
+    w1 = w1.encode()
+    w2 = w2.encode()
+    return sum(bit_diff(b1, b2) for b1, b2 in zip(w1, w2))
+
+
+a = "this is a test".encode()
+b = "wokka wokka!!!".encode()
+d = 37
+edit_distance(a.decode(), b.decode())
+
+
+with open("6.txt") as f:
+    data = "".join([l.strip() for l in f.readlines()])
+#    ic(data)
+x = base64.b64decode(data)

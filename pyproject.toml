@@ -26,3 +26,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.bandit]
 skips = ["B101"]
+
+[tool.pytest.ini_options]
+markers = ["wip: work in progress; to mark the current set of tests being worked on"]

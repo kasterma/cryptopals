@@ -1,5 +1,6 @@
 ## test_set1.py
 
+import base64
 import random
 import secrets
 from collections import Counter
@@ -137,7 +138,6 @@ def test_ex4():
     ]
 
 
-@pytest.mark.xxx
 def test_ex5():
     plain = (
         "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal"
@@ -146,3 +146,38 @@ def test_ex5():
     cipher = repeating_key_xor(plain, key)
     expected_result = "0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a26226324272765272a282b2f20430a652e2c652a3124333a653e2b2027630c692b20283165286326302e27282f"
     assert cipher == expected_result
+
+
+@pytest.mark.parametrize(
+    "b1, b2, d",
+    [
+        (116, 119, 2),
+        (104, 111, 3),
+        (105, 107, 1),
+        (115, 107, 2),
+        (32, 97, 2),
+        (105, 32, 3),
+        (115, 119, 1),
+        (32, 111, 5),
+        (97, 107, 2),
+        (32, 107, 4),
+        (116, 97, 3),
+        (101, 33, 2),
+        (115, 33, 3),
+        (116, 33, 4),
+    ],
+)
+def test_bit_diff(b1, b2, d):
+    assert bit_diff(b1, b2) == d
+
+
+def test_edit_distance():
+    assert edit_distance("kitten", "sitting") == 4
+    assert edit_distance("bla", "blb") == 2
+    assert edit_distance("this is a test", "wokka wokka!!!") == 37
+
+
+@pytest.mark.wip
+@pytest.mark.xfail
+def test_ex6():
+    assert False
