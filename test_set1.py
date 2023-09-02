@@ -172,12 +172,58 @@ def test_bit_diff(b1, b2, d):
 
 
 def test_edit_distance():
-    assert edit_distance("kitten", "sitting") == 4
-    assert edit_distance("bla", "blb") == 2
-    assert edit_distance("this is a test", "wokka wokka!!!") == 37
+    assert edit_distance("kitten".encode(), "sitting".encode()) == 4
+    assert edit_distance("bla".encode(), "blb".encode()) == 2
+    assert edit_distance("this is a test".encode(), "wokka wokka!!!".encode()) == 37
+
+
+plain_inputs = [
+    (
+        "Some text of a decent length to check the key length finding algorithm.  It looks like we need some fair bit of text to work with.",
+        "abcdefghijklmn",
+    ),
+    (
+        "Some text of a decent length to check the key length finding algorithm.  It looks like we need some fair bit of text to work with.",
+        "abcdefghijklmnop",
+    ),
+    (
+        "Some text of a decent length to check the key length finding algorithm.  It looks like we need some fair bit of text to work with.",
+        "abcdefghijklmnopqr",
+    ),
+]
+
+
+@pytest.mark.wip
+@pytest.mark.xfail
+@pytest.mark.parametrize("text, key", plain_inputs)
+def test_find_keysize(text, key):
+    key_length = len(key)
+    ic(key_length)
+    cipher = repeating_key_xor(text, key)
+    key_size_guesses = find_keysize(cipher)
+    assert key_length in [s for s, _ in key_size_guesses]
 
 
 @pytest.mark.wip
 @pytest.mark.xfail
 def test_ex6():
+    with open("6.txt") as f:
+        data = "".join([l.strip() for l in f.readlines()])
+    x = base64.b64decode(data).hex()
+    key_size_guesses = find_keysize(x)
+
     assert False
+
+
+def test_ex7():
+    with open("7.txt") as f:
+        data = "".join([l.strip() for l in f.readlines()])
+    x = base64.b64decode(data)
+
+    from Crypto.Cipher import AES
+
+    key = b"YELLOW SUBMARINE"
+    cipher = AES.new(key, AES.MODE_ECB)
+    plain = cipher.decrypt(x)
+    test = "I'm back and I'm ringin' the bell"
+    assert test == plain[: len(test)].decode()

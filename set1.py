@@ -138,20 +138,26 @@ def bit_diff(b1: int, b2: int) -> int:
     return ct
 
 
-def edit_distance(w1, w2):
-    """Counting difference in number of _bits_ between these two strings"""
-    w1 = w1.encode()
-    w2 = w2.encode()
+def edit_distance(w1: bytes, w2: bytes) -> int:
+    """Counting difference in number of _bits_ between these two bytes"""
     return sum(bit_diff(b1, b2) for b1, b2 in zip(w1, w2))
 
 
-a = "this is a test".encode()
-b = "wokka wokka!!!".encode()
-d = 37
-edit_distance(a.decode(), b.decode())
-
-
-with open("6.txt") as f:
-    data = "".join([l.strip() for l in f.readlines()])
-#    ic(data)
-x = base64.b64decode(data)
+def find_keysize(cipher: str, k: int = 3) -> list[int]:
+    """Use the hint to find the most likely k keysizes"""
+    cipher_b = bytes.fromhex(cipher)
+    ls_graded = [
+        (
+            n,
+            (
+                edit_distance(cipher_b[:n], cipher_b[n : 2 * n])
+                + edit_distance(cipher_b[2 * n : 3 * n], cipher_b[3 * n : 4 * n])
+            )
+            / n,
+        )
+        for n in range(2, min(40, len(cipher) // 4))
+    ]
+    ic(ls_graded)
+    ls_sorted = sorted(ls_graded, key=lambda p: p[1])
+    ic(ls_sorted)
+    return ls_sorted[:k]
