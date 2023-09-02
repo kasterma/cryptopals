@@ -220,10 +220,25 @@ def test_ex7():
         data = "".join([l.strip() for l in f.readlines()])
     x = base64.b64decode(data)
 
-    from Crypto.Cipher import AES
+    ## with pycryptodome (black triggers on this with B413: import_pycrypto,
+    ## but also has the removed B414: import_pycryptodome)
+    from Crypto.Cipher import AES  # nosec
 
     key = b"YELLOW SUBMARINE"
     cipher = AES.new(key, AES.MODE_ECB)
     plain = cipher.decrypt(x)
     test = "I'm back and I'm ringin' the bell"
     assert test == plain[: len(test)].decode()
+
+    ## this is with pyca/cryptography library
+    from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+
+    cipher = Cipher(algorithms.AES(key), modes.ECB())  # nosec
+    # encryptor = cipher.encryptor()
+    # ct = encryptor.update(b"a secret message") + encryptor.finalize()
+
+    decryptor = cipher.decryptor()
+
+    plain2 = decryptor.update(x) + decryptor.finalize()
+
+    assert test == plain2[: len(test)].decode()

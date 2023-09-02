@@ -15,6 +15,7 @@ safety = "^2.3.5"
 isort = "^5.12.0"
 python-language-server = "^0.36.2"
 pycryptodome = "^3.18.0"
+cryptography = "^41.0.3"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -30,3 +31,6 @@ skips = ["B101"]
 
 [tool.pytest.ini_options]
 markers = ["wip: work in progress; to mark the current set of tests being worked on"]
+
+[tool.isort]
+line_length = 120
