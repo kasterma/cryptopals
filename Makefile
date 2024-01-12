@@ -1,5 +1,3 @@
-all: venv test format scan
-
 .PHONY: install
 install:
 	poetry install

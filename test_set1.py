@@ -142,7 +142,7 @@ def test_ex5():
     plain = (
         "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal"
     )
-    key = "ICE"
+    key = "ICE".encode()
     cipher = repeating_key_xor(plain, key)
     expected_result = "0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a26226324272765272a282b2f20430a652e2c652a3124333a653e2b2027630c692b20283165286326302e27282f"
     assert cipher == expected_result
@@ -177,40 +177,65 @@ def test_edit_distance():
     assert edit_distance("this is a test".encode(), "wokka wokka!!!".encode()) == 37
 
 
+def bs(k):
+    return random.randbytes(k)
+
+
 plain_inputs = [
     (
         "Some text of a decent length to check the key length finding algorithm.  It looks like we need some fair bit of text to work with.",
-        "abcdefghijklmn",
+        bs(10),
     ),
     (
         "Some text of a decent length to check the key length finding algorithm.  It looks like we need some fair bit of text to work with.",
-        "abcdefghijklmnop",
+        bs(15),
     ),
     (
         "Some text of a decent length to check the key length finding algorithm.  It looks like we need some fair bit of text to work with.",
-        "abcdefghijklmnopqr",
+        bs(20),
     ),
 ]
 
 
 @pytest.mark.wip
-@pytest.mark.xfail
 @pytest.mark.parametrize("text, key", plain_inputs)
 def test_find_keysize(text, key):
     key_length = len(key)
     ic(key_length)
     cipher = repeating_key_xor(text, key)
-    key_size_guesses = find_keysize(cipher)
+    key_size_guesses = find_keysize(
+        cipher, 5
+    )  # with the default 3 still had an occasional fail
     assert key_length in [s for s, _ in key_size_guesses]
 
 
+transpose_inputs = [
+    ("abcabcabcabc", 3, ["aaaa", "bbbb", "cccc"]),
+    ("abcdabcdabcd", 4, ["aaa", "bbb", "ccc", "ddd"]),
+    ("abcabcabcabcab", 3, ["aaaaa", "bbbbb", "cccc"]),
+]
+
+
 @pytest.mark.wip
-@pytest.mark.xfail
+@pytest.mark.parametrize("text, l, val", transpose_inputs)
+def test_transpose(text, l, val):
+    assert transpose(text, l) == val
+
+
+# pytest.mark.cip
+@pytest.mark.parametrize("val, l, blocks", transpose_inputs)
+def test_combine(val, l, blocks):
+    assert combine(blocks) == val
+
+
+@pytest.mark.wip
+# @pytest.mark.xfail
 def test_ex6():
     with open("6.txt") as f:
         data = "".join([l.strip() for l in f.readlines()])
     x = base64.b64decode(data).hex()
     key_size_guesses = find_keysize(x)
+    ic(key_size_guesses)
 
     assert False
 

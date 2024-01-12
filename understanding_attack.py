@@ -1,6 +1,6 @@
 import random
-import string
 import statistics
+import string
 
 import matplotlib.pyplot as plt
 import numpy as np

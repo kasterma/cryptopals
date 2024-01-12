@@ -5,6 +5,7 @@ import string
 from collections import Counter, defaultdict
 from itertools import zip_longest
 
+import pwn
 from icecream import ic
 
 LETTER_FREQ_TABLE = {
@@ -46,7 +47,7 @@ def fixed_xor(i, k):
     assert len(i) == len(k), f"len(i) = {len(i)} =/= {len(k)} = len(k)"
     i = bytes.fromhex(i)
     k = bytes.fromhex(k)
-    return bytes(ii ^ kk for ii, kk in zip(i, k)).hex()
+    return pwn.xor(i, k).hex()  # bytes(ii ^ kk for ii, kk in zip(i, k)).hex()
 
 
 def one_char_key(c, l):
@@ -119,10 +120,10 @@ def find_all_decodes(
     return [xs[:per_candidate_count] for xs in scored_sorted[:candidate_count]]
 
 
-def repeating_key_xor(plain, key, encode: bool = True):
+def repeating_key_xor(plain: str, key: bytes):
     def get_key():
         while True:
-            for c in key.encode():
+            for c in key:
                 yield c
 
     return bytes(i ^ k for i, k in zip(plain.encode(), get_key())).hex()
@@ -150,14 +151,26 @@ def find_keysize(cipher: str, k: int = 3) -> list[int]:
         (
             n,
             (
-                edit_distance(cipher_b[:n], cipher_b[n : 2 * n])
-                + edit_distance(cipher_b[2 * n : 3 * n], cipher_b[3 * n : 4 * n])
+                edit_distance(cipher_b[:n], cipher_b[n : 2 * n]) / n
+                + edit_distance(cipher_b[2 * n : 3 * n], cipher_b[3 * n : 4 * n]) / n
             )
-            / n,
+            / 2,
         )
         for n in range(2, min(40, len(cipher) // 4))
     ]
-    ic(ls_graded)
     ls_sorted = sorted(ls_graded, key=lambda p: p[1])
-    ic(ls_sorted)
     return ls_sorted[:k]
+
+
+def transpose(cipher: str, l: int) -> list[str]:
+    rv = []
+    for i in range(l):
+        txt = "".join(cipher[j] for j in range(i, len(cipher), l))
+        rv.append(txt)
+    return rv
+
+
+def combine(blocks: list[str]):
+    return "".join(
+        itertools.chain.from_iterable(itertools.zip_longest(*blocks, fillvalue=""))
+    )
