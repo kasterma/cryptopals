@@ -1,8 +1,8 @@
 ## set1
 
 import base64
-import string
 import itertools
+import string
 from collections import Counter, defaultdict
 from itertools import zip_longest
 

@@ -10,15 +10,15 @@ from set1 import *
 
 
 def bs(k):
-    return random.randbytes(k)
+    return random.randbytes(k)  # nosec
 
 
 def ls(k):
-    return "".join(random.choices(string.ascii_letters, k=k)).encode()
+    return "".join(random.choices(string.ascii_letters, k=k)).encode()  # nosec
 
 
 def lsp(k):
-    return "".join(random.choices(string.printable, k=k)).encode()
+    return "".join(random.choices(string.printable, k=k)).encode()  # nosec
 
 
 byte_choices = random.sample(list(Counter(bs(10_000)).keys()), k=95)
@@ -26,7 +26,7 @@ byte_choices = random.sample(list(Counter(bs(10_000)).keys()), k=95)
 
 def sbs(k):
     """selected bytes choices"""
-    return bytes(random.choices(byte_choices, k=k))
+    return bytes(random.choices(byte_choices, k=k))  # nosec
 
 
 k = 10
