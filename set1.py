@@ -2,6 +2,7 @@
 
 import base64
 import string
+import itertools
 from collections import Counter, defaultdict
 from itertools import zip_longest
 
@@ -43,28 +44,25 @@ def hex2b64(x):
     return base64.b64encode(bytes.fromhex(x)).decode("ascii")
 
 
-def fixed_xor(i, k):
+def fixed_xor(i: bytes, k: bytes) -> bytes:
     assert len(i) == len(k), f"len(i) = {len(i)} =/= {len(k)} = len(k)"
-    i = bytes.fromhex(i)
-    k = bytes.fromhex(k)
-    return pwn.xor(i, k).hex()  # bytes(ii ^ kk for ii, kk in zip(i, k)).hex()
+    return pwn.xor(i, k)  # bytes(ii ^ kk for ii, kk in zip(i, k)).hex()
 
 
-def one_char_key(c, l):
-    return bytes([c for _ in range(l)]).hex()
+def one_char_key(c: int, l: int) -> bytes:
+    return bytes([c for _ in range(l)])
 
 
-def all_one_char_decodes(s):
-    assert len(s) % 2 == 0
+def all_one_char_decodes(s: bytes):
     candidates = []
     for one_char in range(256):
-        key = one_char_key(one_char, len(s) // 2)
+        key = one_char_key(one_char, len(s))
         candidate = fixed_xor(s, key)
         candidates.append(candidate)
     return candidates
 
 
-def decode_all(cc):
+def decode_all(cc: list[bytes]) -> list[str]:
     """decode all ciphertexts in cc and drop the ones that give a
     decode error.
 
@@ -74,7 +72,7 @@ def decode_all(cc):
     cc_decoded = []
     for c in cc:
         try:
-            dec = bytes.fromhex(c).decode()
+            dec = c.decode()
             if set(dec).difference(set(string.printable)):
                 continue
             cc_decoded.append(dec)
@@ -83,11 +81,11 @@ def decode_all(cc):
     return cc_decoded
 
 
-def freq_tables(cc_decoded):
+def freq_tables(cc_decoded: str) -> dict[str, Counter]:
     return {c: Counter(c.upper()) for c in cc_decoded}
 
 
-def ft_dist(a, b):
+def ft_dist(a: Counter, b: Counter) -> int:
     return sum((a[k] - b[k]) ** 2 for k in a.keys() | b.keys())
 
 
@@ -102,7 +100,7 @@ def score(decode):
     return ft_dist(Counter(decode.upper()), LETTER_FREQ_TABLE)
 
 
-def find_decode(cipher: str, candidate_count: int = 1) -> list[str]:
+def find_decode(cipher: bytes, candidate_count: int = 1) -> list[str]:
     candidates = all_one_char_decodes(cipher)
     candidates_decoded = decode_all(candidates)
     ft = freq_tables(candidates_decoded)
@@ -111,7 +109,7 @@ def find_decode(cipher: str, candidate_count: int = 1) -> list[str]:
 
 
 def find_all_decodes(
-    ciphers: list[str], per_candidate_count: int = 1, candidate_count: int = 1
+    ciphers: list[bytes], per_candidate_count: int = 1, candidate_count: int = 1
 ) -> list[list[(str, float)]]:
     scored = [
         [(d, score(d)) for d in decode_all(all_one_char_decodes(c))] for c in ciphers
@@ -120,13 +118,13 @@ def find_all_decodes(
     return [xs[:per_candidate_count] for xs in scored_sorted[:candidate_count]]
 
 
-def repeating_key_xor(plain: str, key: bytes):
+def repeating_key_xor(plain: bytes, key: bytes) -> bytes:
     def get_key():
         while True:
             for c in key:
                 yield c
 
-    return bytes(i ^ k for i, k in zip(plain.encode(), get_key())).hex()
+    return bytes(i ^ k for i, k in zip(plain.encode(), get_key()))
 
 
 def bit_diff(b1: int, b2: int) -> int:
@@ -144,15 +142,14 @@ def edit_distance(w1: bytes, w2: bytes) -> int:
     return sum(bit_diff(b1, b2) for b1, b2 in zip(w1, w2))
 
 
-def find_keysize(cipher: str, k: int = 3) -> list[int]:
+def find_keysize(cipher: bytes, k: int = 3) -> list[int]:
     """Use the hint to find the most likely k keysizes"""
-    cipher_b = bytes.fromhex(cipher)
     ls_graded = [
         (
             n,
             (
-                edit_distance(cipher_b[:n], cipher_b[n : 2 * n]) / n
-                + edit_distance(cipher_b[2 * n : 3 * n], cipher_b[3 * n : 4 * n]) / n
+                edit_distance(cipher[:n], cipher[n : 2 * n]) / n
+                + edit_distance(cipher[2 * n : 3 * n], cipher[3 * n : 4 * n]) / n
             )
             / 2,
         )
