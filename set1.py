@@ -128,6 +128,8 @@ def repeating_key_xor(plain: bytes, key: bytes) -> bytes:
 
 
 def bit_diff(b1: int, b2: int) -> int:
+    if b1 < 0 or b2 < 0:
+        raise ValueError("Both b1 and b2 must be non-negative integers.")
     ct = 0
     while b1 or b2:
         if b1 % 2 != b2 % 2:

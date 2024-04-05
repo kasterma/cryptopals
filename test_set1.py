@@ -167,10 +167,19 @@ def test_ex5():
         (101, 33, 2),
         (115, 33, 3),
         (116, 33, 4),
+        (5, 5, 0),
+        (5, 6, 2),
+        (0, 6, 2),
+        (123456789, 987654321, 15),
     ],
 )
 def test_bit_diff(b1, b2, d):
     assert bit_diff(b1, b2) == d
+
+
+def test_bit_diff_negative_numbers():
+    with pytest.raises(ValueError):
+        bit_diff(-1, 5)
 
 
 def test_edit_distance():
