@@ -189,7 +189,7 @@ def test_edit_distance():
 
 
 def bs(k):
-    return random.randbytes(k)
+    return random.randbytes(k)  # nosec: B311
 
 
 # Made this test deterministic, with the random keys there were
