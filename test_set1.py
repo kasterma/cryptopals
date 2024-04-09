@@ -264,10 +264,14 @@ def test_ex7():
     test = "I'm back and I'm ringin' the bell"
     assert test == plain[: len(test)].decode()
 
+    import Crypto
+
+    xor_cipher = Crypto.Cipher.XOR.new()
+
     ## this is with pyca/cryptography library
     from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
-    cipher = Cipher(algorithms.AES(key), modes.ECB())
+    cipher = Cipher(algorithms.AES(key), modes.ECB())  # nosec
     # encryptor = cipher.encryptor()
     # ct = encryptor.update(b"a secret message") + encryptor.finalize()
 
