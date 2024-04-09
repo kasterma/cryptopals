@@ -267,7 +267,7 @@ def test_ex7():
     ## this is with pyca/cryptography library
     from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
-    cipher = Cipher(algorithms.AES(key), modes.ECB())  # nosec
+    cipher = Cipher(algorithms.AES(key), modes.ECB())
     # encryptor = cipher.encryptor()
     # ct = encryptor.update(b"a secret message") + encryptor.finalize()
 
