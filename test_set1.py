@@ -276,12 +276,3 @@ def test_ex7():
     plain2 = decryptor.update(x) + decryptor.finalize()
 
     assert test == plain2[: len(test)].decode()
-
-
-import jwt
-
-
-def bad1():
-    # ruleid: jwt-python-none-alg
-    encoded = jwt.encode({"some": "payload"}, None, algorithm="none")
-    return encoded

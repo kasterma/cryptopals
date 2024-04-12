@@ -808,6 +808,19 @@ MarkupSafe = ">=2.0"
 i18n = ["Babel (>=2.7)"]
 
 [[package]]
+name = "jwt"
+version = "1.3.1"
+description = "JSON Web Token library for Python 3."
+optional = false
+python-versions = ">= 3.6"
+files = [
+    {file = "jwt-1.3.1-py3-none-any.whl", hash = "sha256:61c9170f92e736b530655e75374681d4fcca9cfa8763ab42be57353b2b203494"},
+]
+
+[package.dependencies]
+cryptography = ">=3.1,<3.4.0 || >3.4.0"
+
+[[package]]
 name = "kiwisolver"
 version = "1.4.5"
 description = "A fast implementation of the Cassowary constraint solver"
@@ -2359,4 +2372,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.13"
-content-hash = "24c12b272322902b9bbfd0fba94dae61757f95753c27d26f20075dd583491bac"
+content-hash = "fe6a881f5e90838d6e258021b9fbba4ac6944d5ed9ab54df78acdf54fa43936a"
