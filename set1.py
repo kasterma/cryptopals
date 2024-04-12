@@ -132,10 +132,10 @@ def bit_diff(b1: int, b2: int) -> int:
         raise ValueError("Both b1 and b2 must be non-negative integers.")
     ct = 0
     while b1 or b2:
-        if b1 % 2 != b2 % 2:
+        if b1 & 1 != b2 & 1:
             ct += 1
-        b1 //= 2
-        b2 //= 2
+        b1 >>= 1
+        b2 >>= 1
     return ct
 
 

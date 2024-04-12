@@ -264,10 +264,6 @@ def test_ex7():
     test = "I'm back and I'm ringin' the bell"
     assert test == plain[: len(test)].decode()
 
-    import Crypto
-
-    xor_cipher = Crypto.Cipher.XOR.new()
-
     ## this is with pyca/cryptography library
     from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
@@ -280,3 +276,12 @@ def test_ex7():
     plain2 = decryptor.update(x) + decryptor.finalize()
 
     assert test == plain2[: len(test)].decode()
+
+
+import jwt
+
+
+def bad1():
+    # ruleid: jwt-python-none-alg
+    encoded = jwt.encode({"some": "payload"}, None, algorithm="none")
+    return encoded
