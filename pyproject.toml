@@ -7,24 +7,24 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
-bandit = "^1.7.5"
+bandit = "^1"
 black = "^24"
-hypothesis = "^6.87.1"
-pytest = "^7.4.2"
-safety = "^3.1.0"
-isort = "^5.12.0"
-python-language-server = "^0.36.2"
-pycryptodome = "^3.19.0"
+hypothesis = "^6"
+pytest = "^7"
+safety = "^3"
+isort = "^5"
+python-language-server = "^0"
+pycryptodome = "^3"
 cryptography = "^42"
-pandas = "^2.2.2"
-matplotlib = "^3.8.0"
-pwntools = "^4.11.0"
-scipy = "^1.11.4"
-
+pandas = "^2"
+matplotlib = "^3"
+pwntools = "^4"
+scipy = "^1"
+jwt = "^1"
 
 [tool.poetry.group.dev.dependencies]
-pre-commit = "^3.4.0"
-icecream = "^2.1.3"
+pre-commit = "^3"
+icecream = "^2"
 
 [build-system]
 requires = ["poetry-core"]
