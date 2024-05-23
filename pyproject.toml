@@ -21,6 +21,8 @@ matplotlib = "^3"
 pwntools = "^4"
 scipy = "^1"
 jwt = "^1"
+ipython = "^8.23.0"
+ipykernel = "^6.29.4"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3"
