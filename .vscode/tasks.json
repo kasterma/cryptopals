@@ -1,0 +1,61 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "update pre-commit",
+            "type": "shell",
+            "command": "pre-commit autoupdate",
+            "problemMatcher": []
+        },
+        {
+            "label": "poetry update",
+            "type": "shell",
+            "command": "poetry update",
+            "problemMatcher": []
+        },
+        {
+            "label": "install",
+            "type": "shell",
+            "command": "poetry install",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "command": "poetry run pytest -v -k wip"
+        },
+        {
+            "label": "format",
+            "type": "shell",
+            "command": [
+                "poetry run black *.py",
+                "poetry run isort ."
+            ]
+        },
+        {
+            "label": "lint-black",
+            "type": "shell",
+            "command": "poetry run black --check *.py"
+        },
+        {
+            "label": "lint-isort",
+            "type": "shell",
+            "command": "poetry run isort --check --diff ."
+        },
+        {
+            "label": "lint-bandit",
+            "type": "shell",
+            "command": "poetry run bandit -c pyproject.toml *.py"
+        },
+        {
+            "label": "lint",
+            "dependsOn": ["lint-black", "lint-isort", "lint-bandit"],
+            "problemMatcher": [],
+        }
+    ]
+}
