@@ -25,6 +25,7 @@ jwt = "^1"
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3"
 icecream = "^2"
+ipykernel = "^6.29.4"
 
 [build-system]
 requires = ["poetry-core"]
