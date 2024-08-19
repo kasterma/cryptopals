@@ -1818,25 +1818,25 @@ tests = ["pytest"]
 
 [[package]]
 name = "pwntools"
-version = "4.12.0"
+version = "4.13.0"
 description = "Pwntools CTF framework and exploit development library."
 optional = false
 python-versions = ">=2.7"
 files = [
-    {file = "pwntools-4.12.0-py2.py3-none-any.whl", hash = "sha256:621a7545615a64f24c44ec7a45c0e504640ad0151d81a2e90205e66f76079c4c"},
-    {file = "pwntools-4.12.0.tar.gz", hash = "sha256:320285bd9266152fdba3b81de3a31e61a25076645507a38d85f34e1b15998eb1"},
+    {file = "pwntools-4.13.0-py2.py3-none-any.whl", hash = "sha256:34805dd433bd20a0f46a15b51ee8668793b61e85d783c0e0838d687653cbf34e"},
+    {file = "pwntools-4.13.0.tar.gz", hash = "sha256:1d5ca25383ec10fb64e28d142c1d868f91ea1c53a93d3531d3015d830828d3c3"},
 ]
 
 [package.dependencies]
 capstone = ">=3.0.5rc2"
-colored-traceback = "*"
+colored-traceback = {version = "*", markers = "python_version >= \"3\""}
 intervaltree = ">=3.0"
 mako = ">=1.0.0"
 packaging = "*"
 paramiko = ">=1.15.2"
 pip = ">=6.0.8"
 psutil = ">=3.3.0"
-pyelftools = {version = ">=0.24", markers = "python_version >= \"3\""}
+pyelftools = {version = ">=0.29", markers = "python_version >= \"3\""}
 pygments = ">=2.0"
 pyserial = ">=2.7"
 pysocks = "*"
@@ -1846,7 +1846,7 @@ ropgadget = ">=5.3"
 rpyc = "*"
 six = ">=1.12.0"
 sortedcontainers = "*"
-unicorn = ">=1.0.2rc1"
+unicorn = ">=2.0.1"
 unix-ar = {version = "*", markers = "python_version >= \"3\""}
 zstandard = "*"
 
