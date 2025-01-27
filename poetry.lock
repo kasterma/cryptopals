@@ -1939,18 +1939,18 @@ tests = ["pytest"]
 
 [[package]]
 name = "pwntools"
-version = "4.13.1"
+version = "4.14.0"
 description = "Pwntools CTF framework and exploit development library."
 optional = false
 python-versions = ">=2.7"
 files = [
-    {file = "pwntools-4.13.1-py2.py3-none-any.whl", hash = "sha256:2f910a15204bfbc05f62948e796a15dae3e8c386447536947638b5dd028de23f"},
-    {file = "pwntools-4.13.1.tar.gz", hash = "sha256:b3322725fb5031dc30965e3855073608d9abf74d2abf97a72c67d44aadfce37c"},
+    {file = "pwntools-4.14.0-py2.py3-none-any.whl", hash = "sha256:50938e7f0b2e8f7d7e807706766a449ccc2ee9b13e4889a79a8d8866fb743ad4"},
+    {file = "pwntools-4.14.0.tar.gz", hash = "sha256:83b3247de083dffafac3bf40f4d1455732f16e25ce3105fd09b55ac0f0d12e83"},
 ]
 
 [package.dependencies]
 capstone = ">=3.0.5rc2"
-colored-traceback = {version = "*", markers = "python_version >= \"3\""}
+colored_traceback = {version = "*", markers = "python_version >= \"3\""}
 intervaltree = ">=3.0"
 mako = ">=1.0.0"
 packaging = "*"
